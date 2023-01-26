@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -45,6 +46,11 @@ public class Movie {
 
     @ManyToMany
     @JoinTable(name = "movie_characters", joinColumns = @JoinColumn(name="movie_id"),inverseJoinColumns = @JoinColumn(name="character_id"))
-    Set<Character> characters;
+    private Set<Character> characters;
+
+    @ManyToOne
+    private Franchise franchise;
+
+
     
 }
