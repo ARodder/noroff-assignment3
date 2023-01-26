@@ -32,7 +32,7 @@ public class Character {
     @Column(length=10)
     private String gender;
 
-    @Column(length = 100)
+    @Column(length = 300)
     private String url;
 
     @ManyToMany(mappedBy = "characters")
