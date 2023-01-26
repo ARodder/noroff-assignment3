@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,25 +19,32 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Character {
+public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     @Column(length = 50,nullable = false)
-    private String name;
+    private String title;
 
     @Column(length = 50)
-    private String alias;
+    private String genre;
 
-    @Column(length=10)
-    private String gender;
+    @Column(nullable = false)
+    private int releaseYear;
+
+    @Column(length = 50,nullable = false)
+    private String director;
 
     @Column(length = 100)
-    private String url;
+    private String picture;
 
-    @ManyToMany(mappedBy = "characters")
-    private Set<Movie> movies;
+    @Column(length = 100)
+    private String trailer;
+
+    @ManyToMany
+    @JoinTable(name = "movie_characters", joinColumns = @JoinColumn(name="movie_id"),inverseJoinColumns = @JoinColumn(name="character_id"))
+    Set<Character> characters;
     
 }
