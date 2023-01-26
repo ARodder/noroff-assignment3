@@ -38,10 +38,10 @@ public class Movie {
     @Column(length = 50,nullable = false)
     private String director;
 
-    @Column(length = 100)
+    @Column(length = 300)
     private String picture;
 
-    @Column(length = 100)
+    @Column(length = 200)
     private String trailer;
 
     @ManyToMany
