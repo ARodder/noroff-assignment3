@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import dev.roder.MoviesAPI.entities.Franchise;
 
 @Repository
-public interface Franchiserepository extends JpaRepository<Franchise,Integer>{
+public interface FranchiseRepository extends JpaRepository<Franchise,Integer>{
     
 }
