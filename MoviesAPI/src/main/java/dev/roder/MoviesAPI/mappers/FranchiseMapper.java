@@ -13,5 +13,6 @@ public interface FranchiseMapper {
 
     FranchiseDTO franchiseToFranchiseDTO(Franchise franchise);
     Franchise franchisePostDTOToFranchise(FranchisePostDTO franchisePostDTO);
+    Franchise franchiseDTOToFranchise(FranchiseDTO franchiseDTO);
     Collection<FranchiseDTO> franchiseToFranchiseDTO(Collection<Franchise> franchise);
 }

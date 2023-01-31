@@ -13,6 +13,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
@@ -84,8 +85,37 @@ public class FranchiseController {
             )
     })
     public ResponseEntity add(@RequestBody FranchisePostDTO entity){
-        return ResponseEntity.ok(franchiseService.add(
-                franchiseMapper.franchisePostDTOToFranchise(entity)
-        ));
+        franchiseService.add(franchiseMapper.franchisePostDTOToFranchise(entity));
+        return ResponseEntity.created(URI.create("api/v1/franchise/?")).build();
+    }
+
+    @PutMapping("{id}")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Updated successfully",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request",
+                    content = {
+                            @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Element with the provided ID does not exist",
+                    content = {
+                            @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProblemDetail.class))
+                    }
+            )
+    })
+    public ResponseEntity update(@RequestBody FranchiseDTO entity, @PathVariable int id){
+        if(id != entity.getId()){return ResponseEntity.badRequest().build();}
+        franchiseService.update(franchiseMapper.franchiseDTOToFranchise(entity));
+        return ResponseEntity.accepted().build();
     }
 }

@@ -23,7 +23,7 @@ import lombok.Setter;
 public class Movie {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(length = 50,nullable = false)
