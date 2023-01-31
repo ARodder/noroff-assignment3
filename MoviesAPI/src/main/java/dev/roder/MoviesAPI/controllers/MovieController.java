@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MoviePostDTO;
 import dev.roder.MoviesAPI.mappers.MovieMapper;
-import dev.roder.MoviesAPI.services.MovieService;
+import dev.roder.MoviesAPI.services.movie.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -53,7 +53,7 @@ public class MovieController {
     })
     public ResponseEntity add(@RequestBody MoviePostDTO movie) throws URISyntaxException {
 
-        int newEntityId = movieService.add(movieMapper.moviePostDTOToMovie(movie));
+        int newEntityId = movieService.add(movieMapper.moviePostDTOToMovie(movie)).getId();
         // TODO: change location from null
         return ResponseEntity.created(new URI("api/v1/movies/" + newEntityId)).build();
     }
@@ -117,7 +117,6 @@ public class MovieController {
     /**
      * Deletes a movie for a given id.
      * @param id id of the movie to delete.
-     * @return returns the deleted movie.
      */
     @DeleteMapping("{id}")
     @Operation(summary = "Deletes a movie")
@@ -129,8 +128,8 @@ public class MovieController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity delete(@PathVariable int id) {
-
-        return ResponseEntity.ok(movieMapper.movieToMovieDTO(movieService.delete(id)));
+        movieService.delete(id);
+        return ResponseEntity.ok().build();
     }
 
 }

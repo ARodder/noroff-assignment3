@@ -1,4 +1,4 @@
-package dev.roder.MoviesAPI.services;
+package dev.roder.MoviesAPI.services.movie;
 
 import java.util.Collection;
 
@@ -9,13 +9,14 @@ import dev.roder.MoviesAPI.entities.MovieCharacter;
 import dev.roder.MoviesAPI.exceptions.MovieNotFoundException;
 import dev.roder.MoviesAPI.repositories.CharacterRepository;
 import dev.roder.MoviesAPI.repositories.MovieRepository;
+import dev.roder.MoviesAPI.services.CrudService;
 
 /**
  * Takes care of the logic behind the different operations available in the endpoints 
  */
 
 @Service
-public class MovieService {
+public class MovieService implements CrudService<Movie,Integer>{
 
     private MovieRepository movieRepository;
     private CharacterRepository characterRepository;
@@ -32,9 +33,8 @@ public class MovieService {
      * @param newMovie new movie to add to the database.
      * @return returns the id of the new movie.
      */
-    public Integer add(Movie newMovie){
-        movieRepository.save(newMovie);
-        return newMovie.getId();
+    public Movie add(Movie newMovie){
+        return movieRepository.save(newMovie);
     }
 
     /**
@@ -50,7 +50,7 @@ public class MovieService {
      * @param id id of the movie to find
      * @return returns the found movie, or throws an exception.
      */
-    public Movie findById(int id){
+    public Movie findById(Integer id){
         return movieRepository.findById(id).orElseThrow(()-> new MovieNotFoundException(id));
     }
   
@@ -58,8 +58,8 @@ public class MovieService {
      * Updates a movie with the new values
      * @param entity new values of the movie
      */
-    public void update(Movie entity){
-        movieRepository.save(entity);
+    public Movie update(Movie entity){
+        return movieRepository.save(entity);
     }
 
     /**
@@ -67,7 +67,7 @@ public class MovieService {
      * @param id id of the movie to delete.
      * @return returns the deleted movie.
      */
-    public Movie delete(int id){
+    public void delete(Integer id){
         Movie movie = findById(id);
         movie.setFranchise(null);
         for(MovieCharacter character: movie.getCharacters()){
@@ -75,6 +75,10 @@ public class MovieService {
             characterRepository.save(character);
         }
         movieRepository.delete(movie);
-        return movie;
+    }
+
+
+    public boolean exists(Integer id){
+        return movieRepository.existsById(id);
     }
 }

@@ -16,7 +16,7 @@ import dev.roder.MoviesAPI.entities.MovieCharacter;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MoviePostDTO;
 import dev.roder.MoviesAPI.services.CharacterService;
-import dev.roder.MoviesAPI.services.FranchiseService;
+import dev.roder.MoviesAPI.services.franchise.FranchiseService;
 
 @Mapper(componentModel = "spring")
 public abstract class MovieMapper {

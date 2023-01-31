@@ -1,0 +1,13 @@
+package dev.roder.MoviesAPI.entities.DTOs.franchise;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class FranchiseDTO {
+    private int id;
+    private String description;
+    private String name;
+
+}
