@@ -8,14 +8,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import dev.roder.MoviesAPI.entities.Franchise;
 import dev.roder.MoviesAPI.entities.Movie;
 import dev.roder.MoviesAPI.entities.MovieCharacter;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MoviePostDTO;
-import dev.roder.MoviesAPI.services.CharacterService;
+import dev.roder.MoviesAPI.services.character.CharacterService;
 import dev.roder.MoviesAPI.services.franchise.FranchiseService;
 
 @Mapper(componentModel = "spring")
