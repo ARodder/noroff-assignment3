@@ -2,8 +2,12 @@ package dev.roder.MoviesAPI.controllers;
 
 import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchiseDTO;
 import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchisePostDTO;
+import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
+import dev.roder.MoviesAPI.exceptions.FranchiseNotFoundException;
 import dev.roder.MoviesAPI.mappers.FranchiseMapper;
+import dev.roder.MoviesAPI.mappers.MovieMapper;
 import dev.roder.MoviesAPI.services.franchise.FranchiseService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,10 +28,13 @@ public class FranchiseController {
 
         private final FranchiseService franchiseService;
         private final FranchiseMapper franchiseMapper;
+        private final MovieMapper movieMapper;
 
-        public FranchiseController(FranchiseService franchiseService, FranchiseMapper franchiseMapper) {
+        public FranchiseController(FranchiseService franchiseService, FranchiseMapper franchiseMapper,
+                        MovieMapper movieMapper) {
                 this.franchiseService = franchiseService;
                 this.franchiseMapper = franchiseMapper;
+                this.movieMapper = movieMapper;
         }
 
         @GetMapping
@@ -111,24 +118,53 @@ public class FranchiseController {
         }
 
         /**
-         * Creates an endpoint to update movies franchises based only on the id of the 
+         * Creates an endpoint to update movies franchises based only on the id of the
          * franchise and the id of the movies to update.
-         * @param id id of the franchise to set the movies to.
+         * 
+         * @param id       id of the franchise to set the movies to.
          * @param movieIds ids of the movies to set the franchise to
          * @return returns the updated franchise.
          */
         @PutMapping("{id}/updateMovies")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Deleted successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FranchiseDTO.class)))),
-                        @ApiResponse(responseCode = "400", description = "Bad request", content = {
-                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
-                        }),
                         @ApiResponse(responseCode = "404", description = "Element with the provided ID does not exist", content = {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
                         })
         })
         public ResponseEntity updateMoviesInFranchise(@PathVariable Integer id, @RequestBody List<Integer> movieIds) {
-                return ResponseEntity.ok(franchiseMapper
-                                .franchiseToFranchiseDTO(franchiseService.updateMoviesInFranchise(id, movieIds)));
+                try {
+
+                        return ResponseEntity.ok(franchiseMapper
+                                        .franchiseToFranchiseDTO(
+                                                        franchiseService.updateMoviesInFranchise(id, movieIds)));
+                } catch (FranchiseNotFoundException e) {
+                        return ResponseEntity.notFound().build();
+                }
+        }
+
+        /**
+         * Retrieves all the movies in a franchise.
+         * 
+         * @param id if of the franchise to retrieve movies from.
+         * @return collection of the found movies
+         */
+        @GetMapping("{id}/movies")
+        @Operation(summary = "Gets all the movies in a franchise")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Success", content = {
+                                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = MovieDTO.class)))
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Element with the provided ID does not exist", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
+                        })
+        })
+        public ResponseEntity getAllMoviesInFranchise(@PathVariable Integer id) {
+                try {
+                        return ResponseEntity
+                                        .ok(movieMapper.movieToMovieDTO(franchiseService.getAllMoviesInFranchise(id)));
+                } catch (FranchiseNotFoundException e) {
+                        return ResponseEntity.notFound().build();
+                }
         }
 }

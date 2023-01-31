@@ -59,7 +59,12 @@ public class MovieService implements CrudService<Movie, Integer> {
      * @param entity new values of the movie
      */
     public Movie update(Movie entity){
-        return movieRepository.save(entity);
+        if(exists(entity.getId())){
+
+            return movieRepository.save(entity);
+        }else{
+            throw new MovieNotFoundException(entity.getId());
+        }
     }
 
     /**
