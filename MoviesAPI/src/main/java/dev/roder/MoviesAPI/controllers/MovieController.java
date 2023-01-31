@@ -137,7 +137,7 @@ public class MovieController {
 
     @PutMapping("{id}/updateCharacters")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Deleted successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FranchiseDTO.class)))),
+            @ApiResponse(responseCode = "204", description = "Updated successfully", content = @Content),
             @ApiResponse(responseCode = "400", description = "Bad request", content = {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
             }),
