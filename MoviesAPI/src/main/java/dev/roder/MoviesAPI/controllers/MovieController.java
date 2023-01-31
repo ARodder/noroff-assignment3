@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MoviePostDTO;
+import dev.roder.MoviesAPI.exceptions.MovieNotFoundException;
 import dev.roder.MoviesAPI.mappers.MovieMapper;
 import dev.roder.MoviesAPI.services.movie.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -40,12 +41,15 @@ public class MovieController {
         this.movieService = movieService;
         this.movieMapper = movieMapper;
     }
-/**
- * Adds a new movie to he database.
- * @param movie new movie to add.
- * @return location of the new movie.
- * @throws URISyntaxException exception thrown if the URI is incorrectly formatted.
- */
+
+    /**
+     * Adds a new movie to he database.
+     * 
+     * @param movie new movie to add.
+     * @return location of the new movie.
+     * @throws URISyntaxException exception thrown if the URI is incorrectly
+     *                            formatted.
+     */
     @PostMapping
     @Operation(summary = "Add a new Movie")
     @ApiResponses(value = {
@@ -60,6 +64,7 @@ public class MovieController {
 
     /**
      * Finds all movies in the database.
+     * 
      * @return all movies found in the database
      */
     @GetMapping
@@ -74,8 +79,9 @@ public class MovieController {
     }
 
     /**
-     * Retrieves a specific movie from the database based 
+     * Retrieves a specific movie from the database based
      * on id
+     * 
      * @param id id of the movie to find
      * @return Returns the found movie, if none then returns 404.
      */
@@ -89,13 +95,18 @@ public class MovieController {
 
     })
     public ResponseEntity findById(@PathVariable int id) {
-        return ResponseEntity.ok(movieMapper.movieToMovieDTO(movieService.findById(id)));
+        try {
+            return ResponseEntity.ok(movieMapper.movieToMovieDTO(movieService.findById(id)));
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**
      * Updates a movie
+     * 
      * @param movie new values of the movie to update.
-     * @param id id of the movie to update
+     * @param id    id of the movie to update
      * @return Returns ResponseEntity based on the success of the update.
      */
     @PutMapping("{id}")
@@ -109,13 +120,21 @@ public class MovieController {
         if (id != movie.getId()) {
             return ResponseEntity.badRequest().build();
         }
-        movieService.update(movieMapper.movieDTOToMovie(movie));
+        try {
+
+            movieService.update(movieMapper.movieDTOToMovie(movie));
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
 
         return ResponseEntity.ok().build();
     }
 
     /**
      * Deletes a movie for a given id.
+     * 
      * @param id id of the movie to delete.
      */
     @DeleteMapping("{id}")
@@ -128,7 +147,14 @@ public class MovieController {
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity delete(@PathVariable int id) {
-        movieService.delete(id);
+
+        try {
+            movieService.delete(id);
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok().build();
     }
 

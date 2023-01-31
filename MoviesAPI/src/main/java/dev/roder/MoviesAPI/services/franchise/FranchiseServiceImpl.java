@@ -74,5 +74,11 @@ public class FranchiseServiceImpl implements FranchiseService {
         franchiseRepository.save(franchise);
 
         return franchise;
+    }
+
+    @Override
+    public Collection<Movie> getAllMoviesInFranchise(Integer id) {
+        // TODO Auto-generated method stub
+        return franchiseRepository.findById(id).orElseThrow(()-> new FranchiseNotFoundException(id)).getMovies();
     } 
 }
