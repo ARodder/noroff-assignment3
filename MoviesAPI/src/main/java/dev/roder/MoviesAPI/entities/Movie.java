@@ -46,7 +46,7 @@ public class Movie {
 
     @ManyToMany
     @JoinTable(name = "movie_characters", joinColumns = @JoinColumn(name="movie_id"),inverseJoinColumns = @JoinColumn(name="character_id"))
-    private Set<Character> characters;
+    private Set<MovieCharacter> characters;
 
     @ManyToOne
     private Franchise franchise;

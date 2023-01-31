@@ -1,4 +1,4 @@
-package dev.roder.MoviesAPI.entities.dto.franchise;
+package dev.roder.MoviesAPI.entities.DTOs.franchise;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package dev.roder.MoviesAPI.controllers;
 
-import dev.roder.MoviesAPI.entities.dto.franchise.FranchiseDTO;
-import dev.roder.MoviesAPI.entities.dto.franchise.FranchisePostDTO;
+import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchiseDTO;
+import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchisePostDTO;
 import dev.roder.MoviesAPI.mappers.FranchiseMapper;
 import dev.roder.MoviesAPI.services.franchise.FranchiseService;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -148,7 +148,7 @@ public class FranchiseController {
     })
     public ResponseEntity delete(@RequestBody FranchiseDTO entity, @PathVariable int id){
         if(id != entity.getId()){return ResponseEntity.badRequest().build();}
-        franchiseService.deleteById(id);
+        franchiseService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

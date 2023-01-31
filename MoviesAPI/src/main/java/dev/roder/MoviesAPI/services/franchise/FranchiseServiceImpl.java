@@ -39,7 +39,7 @@ public class FranchiseServiceImpl implements FranchiseService {
 
     @Override
     @Transactional
-    public void deleteById(Integer integer) {
+    public void delete(Integer integer) {
         franchiseRepository.updateForeignKeyMovieSetNull(integer);
         franchiseRepository.deleteById(integer);
     }

@@ -1,8 +1,9 @@
 package dev.roder.MoviesAPI.mappers;
 
 import dev.roder.MoviesAPI.entities.Franchise;
-import dev.roder.MoviesAPI.entities.dto.franchise.FranchiseDTO;
-import dev.roder.MoviesAPI.entities.dto.franchise.FranchisePostDTO;
+import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchiseDTO;
+import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchisePostDTO;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
