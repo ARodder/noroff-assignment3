@@ -3,8 +3,10 @@ package dev.roder.MoviesAPI.services.franchise;
 import dev.roder.MoviesAPI.entities.Franchise;
 import dev.roder.MoviesAPI.repositories.FranchiseRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 public class FranchiseServiceImpl implements FranchiseService {
@@ -36,12 +38,14 @@ public class FranchiseServiceImpl implements FranchiseService {
     }
 
     @Override
+    @Transactional
     public void deleteById(Integer integer) {
-
+        franchiseRepository.updateForeignKeyMovieSetNull(integer);
+        franchiseRepository.deleteById(integer);
     }
 
     @Override
     public boolean exists(Integer integer) {
-        return false;
+        return franchiseRepository.existsById(integer);
     }
 }

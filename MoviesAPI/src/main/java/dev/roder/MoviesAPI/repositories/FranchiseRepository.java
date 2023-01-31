@@ -11,4 +11,7 @@ import dev.roder.MoviesAPI.entities.Franchise;
 @Repository
 public interface FranchiseRepository extends JpaRepository<Franchise,Integer>{
 
+    @Modifying
+    @Query(value = "UPDATE movie SET franchise_id = null WHERE franchise_id = ?1", nativeQuery = true)
+    void updateForeignKeyMovieSetNull(@Param("id") Integer id);
 }

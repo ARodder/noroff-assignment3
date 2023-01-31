@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jdk.jfr.BooleanFlag;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -116,6 +119,48 @@ public class FranchiseController {
     public ResponseEntity update(@RequestBody FranchiseDTO entity, @PathVariable int id){
         if(id != entity.getId()){return ResponseEntity.badRequest().build();}
         franchiseService.update(franchiseMapper.franchiseDTOToFranchise(entity));
-        return ResponseEntity.accepted().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping("{id}")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Deleted successfully",
+                    content = @Content
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ProblemDetail.class))
+                    }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Element with the provided ID does not exist",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ProblemDetail.class))
+                    }
+            )
+    })
+    public ResponseEntity delete(@RequestBody FranchiseDTO entity, @PathVariable int id){
+        if(id != entity.getId()){return ResponseEntity.badRequest().build();}
+        franchiseService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @RequestMapping(value = "exists/{id}", method = RequestMethod.GET)
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Success",
+                    content = @Content
+            )
+    })
+    public ResponseEntity exists(@PathVariable int id){
+        return ResponseEntity.ok(franchiseService.exists(id));
     }
 }
