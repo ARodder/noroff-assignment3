@@ -11,6 +11,6 @@ import dev.roder.MoviesAPI.entities.Movie;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie,Integer>{
     @Modifying
-    @Query(value = "INSERT INTO movie_characters(movie_id, character_id) VALUES (?1, ?2)", nativeQuery = true)
+    @Query(value = "INSERT INTO movie_characters(movie_id, character_id) VALUES (?1, ?2) ON CONFLICT DO NOTHING", nativeQuery = true)
     void addCharacterMovieRelation(@Param("movie_id") Integer movie_id, @Param("char_id") Integer char_id);
 }
