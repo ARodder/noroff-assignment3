@@ -3,6 +3,8 @@ package dev.roder.MoviesAPI.entities.DTOs.character;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 public class MovieCharacterDTO {
@@ -11,4 +13,5 @@ public class MovieCharacterDTO {
     private String alias;
     private String gender;
     private String url;
+    private Set<Integer> movies;
 }

@@ -16,13 +16,13 @@ import dev.roder.MoviesAPI.services.CrudService;
  */
 
 @Service
-public class MovieService implements CrudService<Movie,Integer>{
+public class MovieService implements CrudService<Movie, Integer> {
 
     private MovieRepository movieRepository;
     private CharacterRepository characterRepository;
 
 
-    public MovieService(MovieRepository movieRepository,CharacterRepository characterRepository) {
+    public MovieService(MovieRepository movieRepository, CharacterRepository characterRepository) {
         this.movieRepository = movieRepository;
         this.characterRepository = characterRepository;
     }
