@@ -2,7 +2,10 @@ package dev.roder.MoviesAPI.controllers;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
+import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchiseDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -130,6 +133,21 @@ public class MovieController {
     public ResponseEntity delete(@PathVariable int id) {
         movieService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{id}/updateCharacters")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Deleted successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FranchiseDTO.class)))),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Element with the provided ID does not exist", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
+            })
+    })
+    public ResponseEntity addCharacters(@RequestBody List<Integer> characterIds, @PathVariable int id){
+        movieService.updateCharactersInMovie(id, characterIds);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
