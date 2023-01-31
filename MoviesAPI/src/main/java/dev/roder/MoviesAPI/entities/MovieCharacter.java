@@ -22,7 +22,7 @@ import lombok.Setter;
 public class MovieCharacter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(length = 50,nullable = false)
@@ -39,5 +39,9 @@ public class MovieCharacter {
 
     @ManyToMany(mappedBy = "characters")
     private Set<Movie> movies;
+
+    public void removeMovie(Movie movie){
+        movies.remove(movie);
+    }
     
 }
