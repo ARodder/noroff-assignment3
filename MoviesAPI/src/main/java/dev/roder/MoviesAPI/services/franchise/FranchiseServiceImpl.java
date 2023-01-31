@@ -2,6 +2,7 @@ package dev.roder.MoviesAPI.services.franchise;
 
 import dev.roder.MoviesAPI.entities.Franchise;
 import dev.roder.MoviesAPI.entities.Movie;
+import dev.roder.MoviesAPI.entities.MovieCharacter;
 import dev.roder.MoviesAPI.exceptions.FranchiseNotFoundException;
 import dev.roder.MoviesAPI.repositories.FranchiseRepository;
 import dev.roder.MoviesAPI.repositories.MovieRepository;
@@ -10,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -80,5 +83,16 @@ public class FranchiseServiceImpl implements FranchiseService {
     public Collection<Movie> getAllMoviesInFranchise(Integer id) {
         // TODO Auto-generated method stub
         return franchiseRepository.findById(id).orElseThrow(()-> new FranchiseNotFoundException(id)).getMovies();
+    }
+
+    @Override
+    @Transactional
+    public Collection<MovieCharacter> getAllCharactersInFranchise(Integer id) {
+        // TODO Auto-generated method stub
+        Set<MovieCharacter> franchiseCharacters = new HashSet<>();
+        for (Movie movie : franchiseRepository.findById(id).orElseThrow(()-> new FranchiseNotFoundException(id)).getMovies()) {
+            franchiseCharacters.addAll(movie.getCharacters());
+        }
+        return franchiseCharacters;
     } 
 }

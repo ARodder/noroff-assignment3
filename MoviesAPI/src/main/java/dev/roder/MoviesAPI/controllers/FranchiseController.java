@@ -4,6 +4,7 @@ import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchiseDTO;
 import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchisePostDTO;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
 import dev.roder.MoviesAPI.exceptions.FranchiseNotFoundException;
+import dev.roder.MoviesAPI.mappers.CharacterMapper;
 import dev.roder.MoviesAPI.mappers.FranchiseMapper;
 import dev.roder.MoviesAPI.mappers.MovieMapper;
 import dev.roder.MoviesAPI.services.franchise.FranchiseService;
@@ -29,12 +30,14 @@ public class FranchiseController {
         private final FranchiseService franchiseService;
         private final FranchiseMapper franchiseMapper;
         private final MovieMapper movieMapper;
+        private final CharacterMapper characterMapper;
 
         public FranchiseController(FranchiseService franchiseService, FranchiseMapper franchiseMapper,
-                        MovieMapper movieMapper) {
+                        MovieMapper movieMapper, CharacterMapper characterMapper) {
                 this.franchiseService = franchiseService;
                 this.franchiseMapper = franchiseMapper;
                 this.movieMapper = movieMapper;
+                this.characterMapper = characterMapper;
         }
 
         @GetMapping
@@ -165,6 +168,32 @@ public class FranchiseController {
                                         .ok(movieMapper.movieToMovieDTO(franchiseService.getAllMoviesInFranchise(id)));
                 } catch (FranchiseNotFoundException e) {
                         return ResponseEntity.notFound().build();
+                }
+        }
+
+        /**
+         * Retrieves all the characters from a franchise based on a given id
+         * @param id id of the franchise to retrieve characters from.
+         * @return collection of all the characters in the franchise.
+         */
+        @GetMapping("{id}/characters")
+        @Operation(summary = "Gets all the characters in a franchise")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Success", content = {
+                                        @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = MovieDTO.class)))
+                        }),
+                        @ApiResponse(responseCode = "404", description = "Element with the provided ID does not exist", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
+                        })
+        })
+        public ResponseEntity getAllCharactersInFranchise(@PathVariable Integer id) {
+                try {
+                        return ResponseEntity.ok(characterMapper.movieCharacterToMovieCharacterDTO(
+                                        franchiseService.getAllCharactersInFranchise(id)));
+                } catch (FranchiseNotFoundException e) {
+                        return ResponseEntity.notFound().build();
+                } catch (Exception e) {
+                        return ResponseEntity.badRequest().build();
                 }
         }
 }
