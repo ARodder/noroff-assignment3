@@ -2,7 +2,6 @@ package dev.roder.MoviesAPI.controllers;
 
 import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterDTO;
 import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterPostDTO;
-import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterUpdateDTO;
 import dev.roder.MoviesAPI.mappers.CharacterMapper;
 import dev.roder.MoviesAPI.services.character.CharacterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -149,10 +148,10 @@ public class CharacterController {
                     }
             )
     })
-    public ResponseEntity update(@RequestBody MovieCharacterUpdateDTO entity, @PathVariable int id){
+    public ResponseEntity update(@RequestBody MovieCharacterDTO entity, @PathVariable int id){
         if(id != entity.getId()){return ResponseEntity.badRequest().build();}
         characterService.update(
-                characterMapper.movieCharacterUpdateDTOToMovieCharacter(entity));
+                characterMapper.movieCharacterDTOToMovieCharacter(entity));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

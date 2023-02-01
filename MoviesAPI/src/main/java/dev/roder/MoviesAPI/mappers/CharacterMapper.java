@@ -2,7 +2,6 @@ package dev.roder.MoviesAPI.mappers;
 
 import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterDTO;
 import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterPostDTO;
-import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterUpdateDTO;
 import dev.roder.MoviesAPI.entities.Movie;
 import dev.roder.MoviesAPI.entities.MovieCharacter;
 import dev.roder.MoviesAPI.services.movie.MovieService;
@@ -28,7 +27,6 @@ public abstract class CharacterMapper {
     @Mapping(target="movies", qualifiedByName = "movieIdToMovie")
     public abstract MovieCharacter movieCharacterDTOToMovieCharacter(MovieCharacterDTO movieCharacterDTO);
     public abstract MovieCharacter movieCharacterPostDTOToMovieCharacter(MovieCharacterPostDTO movieCharacterPostDTO);
-    public abstract MovieCharacter movieCharacterUpdateDTOToMovieCharacter(MovieCharacterUpdateDTO movieCharacterUpdateDTO);
     public abstract Collection<MovieCharacterDTO> movieCharacterToMovieCharacterDTO(Collection<MovieCharacter> movieCharacter);
 
     @Named("movieToMovieId")
