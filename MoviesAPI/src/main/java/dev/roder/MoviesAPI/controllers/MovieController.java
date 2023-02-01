@@ -175,8 +175,12 @@ public class MovieController {
             })
     })
     public ResponseEntity addCharacters(@RequestBody List<Integer> characterIds, @PathVariable int id) {
-        movieService.updateCharactersInMovie(id, characterIds);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        try {
+            movieService.updateCharactersInMovie(id, characterIds);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**

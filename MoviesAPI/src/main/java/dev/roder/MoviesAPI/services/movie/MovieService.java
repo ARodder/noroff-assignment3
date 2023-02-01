@@ -3,6 +3,7 @@ package dev.roder.MoviesAPI.services.movie;
 import java.util.Collection;
 import java.util.List;
 
+import dev.roder.MoviesAPI.exceptions.CharacterNotFoundException;
 import org.springframework.stereotype.Service;
 
 import dev.roder.MoviesAPI.entities.Movie;
@@ -91,7 +92,9 @@ public class MovieService implements CrudService<Movie, Integer> {
 
     @Transactional
     public void updateCharactersInMovie(Integer id, List<Integer> characterIds){
+        if(!exists(id)){throw new MovieNotFoundException(id);}
         for(int character : characterIds){
+            if(!characterRepository.existsById(character)){throw new CharacterNotFoundException(character);}
             movieRepository.addCharacterMovieRelation(id, character);
         }
     }
