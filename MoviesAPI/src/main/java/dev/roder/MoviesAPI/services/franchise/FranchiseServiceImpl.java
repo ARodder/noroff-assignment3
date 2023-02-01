@@ -17,6 +17,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service acting as the middleman in communication between
+ * REST endpoints and the repository that queries the database
+ * Any additional business logic needed to handle requests is found here
+ * in order to relieve responsibilities of the REST controllers
+ */
 @Service
 public class FranchiseServiceImpl implements FranchiseService {
 
@@ -29,33 +35,68 @@ public class FranchiseServiceImpl implements FranchiseService {
         this.movieRepository = movieRepository;
     }
 
+    /**
+     * Retrieves a specific Franchise
+     * @param integer: Integer identifier of unique Franchise
+     * @return Franchise entity object
+     */
     @Override
     public Franchise findById(Integer integer) {
-        return franchiseRepository.findById(integer).orElseThrow();
+        return franchiseRepository.findById(integer).orElseThrow(() -> new FranchiseNotFoundException(integer));
     }
 
+    /**
+     * Retrieves all Franchises
+     * @return A Collection of Franchise entity objects
+     */
     @Override
     public Collection<Franchise> findAll() {
         return franchiseRepository.findAll();
     }
 
+    /**
+     * Adds a new Franchise to the database
+     * @param entity: Franchise entity object to be added
+     * @return The newly created Franchise entity object
+     */
     @Override
     public Franchise add(Franchise entity) {
         return franchiseRepository.save(entity);
     }
 
+    /**
+     * Updates an existing Franchise entity object in the database
+     * @param entity: Franchise entity object to be updated
+     * @return The Franchise entity object that was updated
+     */
     @Override
     public Franchise update(Franchise entity) {
         return franchiseRepository.save(entity);
     }
 
+    /**
+     * Deletes a Franchise entity object from the database
+     * Sets all foreign keys of entities relating to the Franchise to null
+     * It is annotated with Transactional because the connection to the database
+     * needs to stay open in order to complete more than one repository request
+     * @param integer: Integer identifier representing the Franchise entity object to be deleted
+     */
     @Override
     @Transactional
     public void delete(Integer integer) {
+        // We first set the foreign keys to null in order to be able
+        // to delete the entity without violating foreign key constraints
         franchiseRepository.updateForeignKeyMovieSetNull(integer);
+        // Now we can safely delete the entity in question
         franchiseRepository.deleteById(integer);
     }
 
+    /**
+     * Checks if a specific Franchise entity exists
+     * @param integer: Integer identifier representing the Franchise entity
+     * @return Boolean value representing the existence of the entity
+     *         True: Entity exists, False; Entity does not exist
+     */
     @Override
     public boolean exists(Integer integer) {
         return franchiseRepository.existsById(integer);
@@ -79,12 +120,22 @@ public class FranchiseServiceImpl implements FranchiseService {
         return franchise;
     }
 
+    /**
+     * Retrieves all Movies that relate to specific Franchise entity
+     * @param id: Integer identifier representing Franchise entity
+     * @return A Collection of Movie entities that relate to the specific Franchise
+     */
     @Override
     public Collection<Movie> getAllMoviesInFranchise(Integer id) {
         // TODO Auto-generated method stub
         return franchiseRepository.findById(id).orElseThrow(()-> new FranchiseNotFoundException(id)).getMovies();
     }
 
+    /**
+     * Retrieves all Character entities that relate to a specific Franchise entity
+     * @param id: Integer identifier representing specific Franchise entity
+     * @return A Collection of Character entities that relate to specific Franchise
+     */
     @Override
     @Transactional
     public Collection<MovieCharacter> getAllCharactersInFranchise(Integer id) {
