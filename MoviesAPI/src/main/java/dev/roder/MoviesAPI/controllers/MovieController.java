@@ -4,7 +4,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchiseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MoviePostDTO;
 import dev.roder.MoviesAPI.exceptions.MovieNotFoundException;
+import dev.roder.MoviesAPI.mappers.CharacterMapper;
 import dev.roder.MoviesAPI.mappers.MovieMapper;
 import dev.roder.MoviesAPI.services.movie.MovieService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,10 +39,12 @@ public class MovieController {
     private MovieService movieService;
 
     private MovieMapper movieMapper;
+    private CharacterMapper characterMapper;
 
-    public MovieController(MovieService movieService, MovieMapper movieMapper) {
+    public MovieController(MovieService movieService, MovieMapper movieMapper, CharacterMapper characterMapper) {
         this.movieService = movieService;
         this.movieMapper = movieMapper;
+        this.characterMapper = characterMapper;
     }
 
     /**
@@ -128,7 +130,7 @@ public class MovieController {
             movieService.update(movieMapper.movieDTOToMovie(movie));
         } catch (MovieNotFoundException e) {
             return ResponseEntity.notFound().build();
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
 
@@ -153,12 +155,13 @@ public class MovieController {
 
         try {
             movieService.delete(id);
+            return ResponseEntity.ok().build();
         } catch (MovieNotFoundException e) {
             return ResponseEntity.notFound().build();
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().build();
+
     }
 
     @PutMapping("{id}/updateCharacters")
@@ -171,9 +174,38 @@ public class MovieController {
                     @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
             })
     })
-    public ResponseEntity addCharacters(@RequestBody List<Integer> characterIds, @PathVariable int id){
+    public ResponseEntity addCharacters(@RequestBody List<Integer> characterIds, @PathVariable int id) {
         movieService.updateCharactersInMovie(id, characterIds);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /**
+     * Retrieves all the characters for a specific movie.
+     * 
+     * @param id id of the movie to retrieve characters from.
+     * @return returns a collection of characters.
+     */
+    @GetMapping("{id}/characters")
+    @Operation(summary = "Get all characters in a movie")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Updated successfully", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad request", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "Element with the provided ID does not exist", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))
+            })
+    })
+    public ResponseEntity findAllCharactersInMovie(@PathVariable Integer id) {
+        try {
+            return ResponseEntity
+                    .ok(characterMapper.movieCharacterToMovieCharacterDTO(movieService.findAllCharactersInMovie(id)));
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
 }
