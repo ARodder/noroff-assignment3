@@ -54,7 +54,31 @@ public class CharacterServiceImpl implements CharacterService {
      * @return Character entity that was updated
      */
     @Override
-    public MovieCharacter update(MovieCharacter entity) { return characterRepository.save(entity); }
+    public MovieCharacter update(MovieCharacter entity) {
+        if(exists(entity.getId())){
+            MovieCharacter existingCharacter = characterRepository.findById(entity.getId()).orElseThrow(()-> new CharacterNotFoundException(entity.getId()));
+
+            if(entity.getMovies() != null){
+                existingCharacter.setMovies(entity.getMovies());
+            }
+            if(entity.getName() != null){
+                existingCharacter.setName(entity.getName());
+            }
+            if(entity.getAlias() != null){
+                existingCharacter.setAlias(entity.getAlias());
+            }
+            if(entity.getGender() != null){
+                existingCharacter.setGender(entity.getGender());
+            }
+            if(entity.getUrl() != null){
+                existingCharacter.setUrl(entity.getUrl());
+            }
+
+            return characterRepository.save(existingCharacter);
+        }else{
+            throw new CharacterNotFoundException(entity.getId());
+        }
+    }
 
     /**
      * Deletes a Character entity object from the database
