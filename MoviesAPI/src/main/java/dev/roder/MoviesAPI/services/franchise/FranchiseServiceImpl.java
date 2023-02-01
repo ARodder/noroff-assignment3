@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,7 +70,21 @@ public class FranchiseServiceImpl implements FranchiseService {
      */
     @Override
     public Franchise update(Franchise entity) {
-        return franchiseRepository.save(entity);
+        if(exists(entity.getId())){
+            Franchise franchise = franchiseRepository.findById(entity.getId()).orElseThrow(()-> new FranchiseNotFoundException(entity.getId()));
+            if(entity.getName() != null){
+                franchise.setName(entity.getName());
+            }
+            if(entity.getDescription() != null){
+                franchise.setDescription(entity.getDescription());
+            }
+            if(entity.getMovies() != null){
+                franchise.setMovies(entity.getMovies());
+            }
+            return franchiseRepository.save(franchise);
+        }else{
+            throw new FranchiseNotFoundException(entity.getId());
+        }
     }
 
     /**
