@@ -95,4 +95,8 @@ public class MovieService implements CrudService<Movie, Integer> {
             movieRepository.addCharacterMovieRelation(id, character);
         }
     }
+
+    public Collection<MovieCharacter> findAllCharactersInMovie(Integer id){
+        return movieRepository.findById(id).orElseThrow(()-> new MovieNotFoundException(id)).getCharacters();
+    }
 }
