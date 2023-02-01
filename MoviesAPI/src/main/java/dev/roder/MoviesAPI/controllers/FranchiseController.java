@@ -23,6 +23,11 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * REST Controller that acts as the outermost
+ * API for communication with clients using URL-based
+ * endpoint communication that passes requests on to services
+ */
 @RestController
 @RequestMapping(path = "api/v1/franchise")
 public class FranchiseController {
@@ -40,7 +45,13 @@ public class FranchiseController {
                 this.characterMapper = characterMapper;
         }
 
+        /**
+         * Retrieves all franchises
+         * @return A Collection of Data Transfer Objects
+         *         representing Franchises
+         */
         @GetMapping
+        @Operation(summary = "Retrieves all Franchises")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Success", content = {
                                         @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FranchiseDTO.class)))
@@ -51,7 +62,13 @@ public class FranchiseController {
                                 franchiseService.findAll()));
         }
 
+        /**
+         * Retrieves a specific Franchise
+         * @param id: Integer identifier of unique Franchise
+         * @return A Data Transfer Object representing a single Franchise
+         */
         @GetMapping("{id}")
+        @Operation(summary = "Retrieves a Franchise by their ID")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Success", content = {
                                         @Content(mediaType = "application/json", schema = @Schema(implementation = FranchiseDTO.class))
@@ -67,7 +84,14 @@ public class FranchiseController {
                 return ResponseEntity.ok(franchiseMapper.franchiseToFranchiseDTO(franchiseService.findById(id)));
         }
 
+        /**
+         * Adds a new entry of a Franchise in the database
+         * @param entity: A Data Transfer Object representing the Franchise entity
+         *                that is to be added
+         * @return The Universal Resource Identifier of the newly created resource
+         */
         @PostMapping
+        @Operation(summary = "Adds a new Franchise")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "201", description = "Created", content = @Content)
         })
@@ -76,7 +100,15 @@ public class FranchiseController {
                 return ResponseEntity.created(URI.create("api/v1/franchise/?")).build();
         }
 
+        /**
+         * Updates the values of an existing entry of a Franchise
+         * @param entity: A Data Transfer Object containing the values that
+         *                are to be updated
+         * @param id: The Integer identifier of the Franchise that is to be updated
+         * @return Returns nothing if resource updates successfully
+         */
         @PutMapping("{id}")
+        @Operation(summary = "Updates an existing Franchise by their ID")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Updated successfully", content = @Content),
                         @ApiResponse(responseCode = "400", description = "Bad request", content = {
@@ -94,7 +126,17 @@ public class FranchiseController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
+        /**
+         * Deletes an existing entry of a Franchise
+         * Only the Franchise entry is deleted and all relations
+         * to other entities the Franchise might have are nullified,
+         * preventing related entities from also getting cascade deleted
+         * @param entity: A Data Transfer Object representing the Franchise to be deleted
+         * @param id: Integer identifier representing the unique Franchise to be deleted
+         * @return Returns nothing if deleted successfully
+         */
         @DeleteMapping("{id}")
+        @Operation(summary = "Deletes a Franchise by their ID")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Deleted successfully", content = @Content),
                         @ApiResponse(responseCode = "400", description = "Bad request", content = {
@@ -112,14 +154,6 @@ public class FranchiseController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
-        @RequestMapping(value = "exists/{id}", method = RequestMethod.GET)
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Success", content = @Content)
-        })
-        public ResponseEntity exists(@PathVariable int id) {
-                return ResponseEntity.ok(franchiseService.exists(id));
-        }
-
         /**
          * Creates an endpoint to update movies franchises based only on the id of the
          * franchise and the id of the movies to update.
@@ -129,6 +163,7 @@ public class FranchiseController {
          * @return returns the updated franchise.
          */
         @PutMapping("{id}/updateMovies")
+        @Operation(summary = "Updates Movies in a Franchise by their ID's")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Deleted successfully", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FranchiseDTO.class)))),
                         @ApiResponse(responseCode = "404", description = "Element with the provided ID does not exist", content = {
