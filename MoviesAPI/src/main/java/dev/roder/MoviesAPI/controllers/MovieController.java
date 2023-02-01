@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MovieDTO;
 import dev.roder.MoviesAPI.entities.DTOs.movie.MoviePostDTO;
 import dev.roder.MoviesAPI.exceptions.MovieNotFoundException;
+import dev.roder.MoviesAPI.exceptions.CharacterNotFoundException;
 import dev.roder.MoviesAPI.mappers.CharacterMapper;
 import dev.roder.MoviesAPI.mappers.MovieMapper;
 import dev.roder.MoviesAPI.services.movie.MovieService;
