@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import dev.roder.MoviesAPI.entities.DTOs.movie.MovieUpdateDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -31,6 +32,8 @@ public abstract class MovieMapper {
     public abstract MovieDTO movieToMovieDTO(Movie movie);
 
     public abstract Movie moviePostDTOToMovie(MoviePostDTO moviePostDto);
+
+    public abstract Movie movieUpdateDTOToMovie(MovieUpdateDTO movieUpdateDTO);
 
     public abstract Collection<MovieDTO> movieToMovieDTO(Collection<Movie> movie);
 

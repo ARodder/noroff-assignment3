@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import dev.roder.MoviesAPI.entities.DTOs.movie.MovieUpdateDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -121,13 +122,13 @@ public class MovieController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content)
     })
-    public ResponseEntity update(@RequestBody MovieDTO movie, @PathVariable int id) {
+    public ResponseEntity update(@RequestBody MovieUpdateDTO movie, @PathVariable int id) {
         if (id != movie.getId()) {
             return ResponseEntity.badRequest().build();
         }
         try {
 
-            movieService.update(movieMapper.movieDTOToMovie(movie));
+            movieService.update(movieMapper.movieUpdateDTOToMovie(movie));
         } catch (MovieNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
