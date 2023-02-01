@@ -48,7 +48,7 @@ public class MovieController {
     }
 
     /**
-     * Adds a new movie to he database.
+     * Adds a new movie to the database.
      * 
      * @param movie new movie to add.
      * @return location of the new movie.
@@ -175,8 +175,14 @@ public class MovieController {
             })
     })
     public ResponseEntity addCharacters(@RequestBody List<Integer> characterIds, @PathVariable int id) {
-        movieService.updateCharactersInMovie(id, characterIds);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        try {
+            movieService.updateCharactersInMovie(id, characterIds);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (MovieNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     /**

@@ -61,9 +61,36 @@ public class MovieService implements CrudService<Movie, Integer> {
      * @param entity new values of the movie
      */
     public Movie update(Movie entity){
+        
         if(exists(entity.getId())){
+            Movie existingMovie = movieRepository.findById(entity.getId()).orElseThrow(()-> new MovieNotFoundException(entity.getId()));
 
-            return movieRepository.save(entity);
+            if(entity.getCharacters() != null){
+                existingMovie.setCharacters(entity.getCharacters());
+            }
+            if(entity.getDirector() != null){
+                existingMovie.setDirector(entity.getDirector());
+            }
+            if(entity.getFranchise() != null){
+                existingMovie.setFranchise(entity.getFranchise());
+            }
+            if(entity.getGenre() != null){
+                existingMovie.setGenre(entity.getGenre());
+            }
+            if(entity.getTitle() != null){
+                existingMovie.setTitle(entity.getTitle());
+            }
+            if(entity.getReleaseYear() != null){
+                existingMovie.setReleaseYear(entity.getReleaseYear());
+            }
+            if(entity.getPicture() != null){
+                existingMovie.setPicture(entity.getPicture());
+            }
+            if(entity.getTrailer() != null){
+                existingMovie.setTrailer(entity.getTrailer());
+            }
+
+            return movieRepository.save(existingMovie);
         }else{
             throw new MovieNotFoundException(entity.getId());
         }

@@ -33,7 +33,7 @@ public class Movie {
     private String genre;
 
     @Column(nullable = false)
-    private int releaseYear;
+    private Integer releaseYear;
 
     @Column(length = 50,nullable = false)
     private String director;
