@@ -22,7 +22,7 @@ import dev.roder.MoviesAPI.exceptions.MovieNotFoundException;
 import dev.roder.MoviesAPI.exceptions.CharacterNotFoundException;
 import dev.roder.MoviesAPI.mappers.CharacterMapper;
 import dev.roder.MoviesAPI.mappers.MovieMapper;
-import dev.roder.MoviesAPI.services.movie.MovieService;
+import dev.roder.MoviesAPI.services.movie.MovieServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,12 +37,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @RestController
 @RequestMapping(path = "api/v1/movies")
 public class MovieController {
-    private MovieService movieService;
+    private MovieServiceImpl movieService;
 
     private MovieMapper movieMapper;
     private CharacterMapper characterMapper;
 
-    public MovieController(MovieService movieService, MovieMapper movieMapper, CharacterMapper characterMapper) {
+    public MovieController(MovieServiceImpl movieService, MovieMapper movieMapper, CharacterMapper characterMapper) {
         this.movieService = movieService;
         this.movieMapper = movieMapper;
         this.characterMapper = characterMapper;

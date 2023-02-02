@@ -4,7 +4,7 @@ import dev.roder.MoviesAPI.entities.Franchise;
 import dev.roder.MoviesAPI.entities.Movie;
 import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchiseDTO;
 import dev.roder.MoviesAPI.entities.DTOs.franchise.FranchisePostDTO;
-import dev.roder.MoviesAPI.services.movie.MovieService;
+import dev.roder.MoviesAPI.services.movie.MovieServiceImpl;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public abstract class FranchiseMapper {
 
     @Autowired
-    private MovieService movieService;
+    private MovieServiceImpl movieService;
 
     @Mapping(target = "movies",qualifiedByName = "moviesToMovieIds")
     public abstract FranchiseDTO franchiseToFranchiseDTO(Franchise franchise);
