@@ -58,6 +58,10 @@ public class MovieServiceImpl implements MovieService {
 
     /**
      * Updates a movie with the new values
+     * A possible future extension could be to introduce
+     * UpdateDTO's that further limit what a client is allowed to
+     * update using a general update, like removing the option to modify
+     * characters here and instead be forced to use the specific "updateCharactersInMovies" endpoint
      * @param entity new values of the movie
      */
     public Movie update(Movie entity){

@@ -15,7 +15,9 @@ public interface FranchiseRepository extends JpaRepository<Franchise,Integer>{
      * Extension method for FranchiseRepository which sets the foreign keys
      * of all Movies that are related to a Franchise to null, effectively making those
      * Movies no longer "apart" of that Franchise in the domain sense. This is done to enable
-     * the safe deletion of a Franchise.
+     * the safe deletion of a Franchise. This method uses a native SQL Query, which is an alternative
+     * way of handling specific business logic as opposed to dealing with entities directly in the
+     * service classes as can be seen done for the "updateMoviesInFranchise" method of the FranchiseServiceImpl class
      * @param id: Integer identifier representing the Franchise entity that Movies should
      *            no longer be linked to
      */
