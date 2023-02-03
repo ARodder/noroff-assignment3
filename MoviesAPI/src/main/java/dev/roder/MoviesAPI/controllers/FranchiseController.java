@@ -47,6 +47,7 @@ public class FranchiseController {
 
         /**
          * Retrieves all franchises
+         * 
          * @return A Collection of Data Transfer Objects
          *         representing Franchises
          */
@@ -64,6 +65,7 @@ public class FranchiseController {
 
         /**
          * Retrieves a specific Franchise
+         * 
          * @param id: Integer identifier of unique Franchise
          * @return A Data Transfer Object representing a single Franchise
          */
@@ -81,11 +83,19 @@ public class FranchiseController {
                         })
         })
         public ResponseEntity<FranchiseDTO> findById(@PathVariable int id) {
-                return ResponseEntity.ok(franchiseMapper.franchiseToFranchiseDTO(franchiseService.findById(id)));
+                try {
+                        return ResponseEntity
+                                        .ok(franchiseMapper.franchiseToFranchiseDTO(franchiseService.findById(id)));
+                } catch (FranchiseNotFoundException e) {
+                        return ResponseEntity.notFound().build();
+                } catch (Exception e) {
+                        return ResponseEntity.badRequest().build();
+                }
         }
 
         /**
          * Adds a new entry of a Franchise in the database
+         * 
          * @param entity: A Data Transfer Object representing the Franchise entity
          *                that is to be added
          * @return The Universal Resource Identifier of the newly created resource
@@ -102,9 +112,10 @@ public class FranchiseController {
 
         /**
          * Updates the values of an existing entry of a Franchise
+         * 
          * @param entity: A Data Transfer Object containing the values that
          *                are to be updated
-         * @param id: The Integer identifier of the Franchise that is to be updated
+         * @param id:     The Integer identifier of the Franchise that is to be updated
          * @return Returns nothing if resource updates successfully
          */
         @PutMapping("{id}")
@@ -122,8 +133,17 @@ public class FranchiseController {
                 if (id != entity.getId()) {
                         return ResponseEntity.badRequest().build();
                 }
-                franchiseService.update(franchiseMapper.franchiseDTOToFranchise(entity));
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+                try {
+
+                        franchiseService.update(franchiseMapper.franchiseDTOToFranchise(entity));
+                        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+                } catch (FranchiseNotFoundException e) {
+                        return ResponseEntity.notFound().build();
+                } catch (Exception e) {
+                        return ResponseEntity.badRequest().build();
+                }
+
         }
 
         /**
@@ -131,8 +151,11 @@ public class FranchiseController {
          * Only the Franchise entry is deleted and all relations
          * to other entities the Franchise might have are nullified,
          * preventing related entities from also getting cascade deleted
-         * @param entity: A Data Transfer Object representing the Franchise to be deleted
-         * @param id: Integer identifier representing the unique Franchise to be deleted
+         * 
+         * @param entity: A Data Transfer Object representing the Franchise to be
+         *                deleted
+         * @param id:     Integer identifier representing the unique Franchise to be
+         *                deleted
          * @return Returns nothing if deleted successfully
          */
         @DeleteMapping("{id}")
@@ -208,6 +231,7 @@ public class FranchiseController {
 
         /**
          * Retrieves all the characters from a franchise based on a given id
+         * 
          * @param id id of the franchise to retrieve characters from.
          * @return collection of all the characters in the franchise.
          */

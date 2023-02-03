@@ -4,7 +4,7 @@ import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterDTO;
 import dev.roder.MoviesAPI.entities.DTOs.character.MovieCharacterPostDTO;
 import dev.roder.MoviesAPI.entities.Movie;
 import dev.roder.MoviesAPI.entities.MovieCharacter;
-import dev.roder.MoviesAPI.services.movie.MovieService;
+import dev.roder.MoviesAPI.services.movie.MovieServiceImpl;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public abstract class CharacterMapper {
 
     @Autowired
-    private MovieService movieService;
+    private MovieServiceImpl movieService;
 
     protected CharacterMapper() {}
 
