@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  postgresDB:
+      image: postgres:13.7
+      volumes:
+        - movies-db-data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_DB: moviesdb
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: ${{secrets.DB_PASSWORD}}
+        
+  backend:
+    build: backend
+    restart: always
+    environment:
+      DB_IP: postgresDB
+      MYSQL_PASSWORD: ${{secrets.DB_password}}
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgresDB
+
+volumes:
+  keycloak-db-data:
+      driver: local
