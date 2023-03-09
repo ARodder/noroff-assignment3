@@ -16,7 +16,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '19'
-        distribution: 'temurin'
+        distribution: 'zulu'
         cache: maven
     - name: mvn compile
       run: sudo mvn -f /home/ubuntu/repos/MoviesAPI compile
@@ -29,7 +29,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '19'
-        distribution: 'temurin'
+        distribution: 'zulu'
         cache: maven
     - name: mvn test
       run: sudo mvn -f /home/ubuntu/repos/MoviesAPI test
@@ -42,7 +42,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '19'
-        distribution: 'temurin'
+        distribution: 'zulu'
         cache: maven
     - name: mvn build jar file
       run: sudo mvn -f /home/ubuntu/repos/MoviesAPI clean install
