@@ -19,7 +19,7 @@ jobs:
         distribution: 'corretto'
         cache: maven
     - name: mvn compile
-      run: sudo mvn -f /home/ubuntu/actions-runner/_work/noroff-assignment3/noroff-assignment3/MoviesAPI spring-boot:build-image
+      run: sudo mvn -f /home/ubuntu/actions-runner/_work/noroff-assignment3/noroff-assignment3/MoviesAPI compile
   mvn-test:
     runs-on: self-hosted
     needs: mvn-compile
